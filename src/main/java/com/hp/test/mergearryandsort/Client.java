@@ -5,24 +5,27 @@ import java.util.Arrays;
 public class Client {
 
     public static void main(String[] args) {
-        int[] a = {19,30,0,3,5,6,7};
+        int[] a = {19, 30, 0, 3, 5, 6, 7, -1, -8};
+        System.out.println(Arrays.toString(a));
         Client.sortArray(a);
         System.out.println(Arrays.toString(a));
-        int[] b = new int[]{-10, -9, -3, 9};
+        int[] b = new int[]{30,20,1,4,5,2,-10, -9, -3, 9};
+        Client.sortArray(b);
+        System.out.println(Arrays.toString(b));
         int[] sortArray = Client.mergeAndSort(a, b);
         System.out.println("-----------------------");
 
-        Arrays.stream(sortArray).forEach(System.out::println);
+        Arrays.stream(sortArray).forEach(t -> System.out.print(t + "  "));
     }
 
 
     public static void sortArray(int[] array) {
         for(int i = 0; i< array.length; i++) {
-            for(int j = 0; j< array.length; j++) {
-                if(array[i] < array[j]) {
-                    int temp = array[i];
-                    array[i] = array[j];
-                    array[j] = temp;
+            for(int j = 0; j< array.length -1; j++) {
+                if(array[j] > array[j+1]) {
+                    int temp = array[j];
+                    array[j] = array[j+1];
+                    array[j+1] = temp;
                 }
             }
         }
