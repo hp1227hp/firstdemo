@@ -1,7 +1,7 @@
 package com.hp.test.binarytree;
 
-import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 public class Client {
@@ -31,7 +31,7 @@ public class Client {
      * 二叉树的先序遍历顺序为：根节点->左孩子->右孩子
      * a b d e h c f g
      *
-     * @param root
+     * @param root 根节点
      */
     public static void preOrder(TreeNode root) {
         if (root != null) {
@@ -47,7 +47,7 @@ public class Client {
      * DBEHAFCG
      * d b e h a f c g
      *
-     * @param root
+     * @param root 根节点
      */
     public static void inOrder(TreeNode root) {
         if (root != null) {
@@ -64,6 +64,8 @@ public class Client {
      * DHEBFGCA
      *
      * @param root
+     * @tag
+     *
      */
     public static void postOrder(TreeNode root) {
         if (root != null) {
@@ -77,7 +79,7 @@ public class Client {
      * 求二叉树的节点个数
      * 节点个数 = 左子树节点数 + 右子树节点数 + 1
      *
-     * @param root
+     * @param root 根节点
      * @return
      */
     public static int size2(TreeNode root) {
@@ -160,16 +162,17 @@ public class Client {
     /**
      * 构建二叉树
      * 递归方式，根据内部写法，所以是前序遍历方式
+     *
      * @param inputList 输入序列
      * @return node 返回根节点
      */
-    public static TreeNode creatBinaryTree(LinkedList<Character> inputList){
+    public static TreeNode creatBinaryTree(LinkedList<Character> inputList) {
         TreeNode node = null;
-        if(inputList == null || inputList.isEmpty()){
+        if (inputList == null || inputList.isEmpty()) {
             return null;
         }
         Character data = inputList.removeFirst(); //去除并返回LinkedList中的第一个元素
-        if (data != null && !(data == ' ')){
+        if (data != null && !(data == ' ')) {
             node = new TreeNode(data);
             node.setLeft(creatBinaryTree(inputList));
             node.setRight(creatBinaryTree(inputList));
@@ -179,21 +182,22 @@ public class Client {
 
     /**
      * 二叉树 非递归的先序遍历
+     *
      * @param root
      */
     public static void preOrderNonRecursive(TreeNode root) {
-        if(root == null) {
+        if (root == null) {
             return;
         }
         Stack<TreeNode> stack = new Stack<>();
         stack.push(root);
-        while(!stack.empty()) {
+        while (!stack.empty()) {
             TreeNode pop = stack.pop();
             System.out.print(pop.getVal() + "  ");
-            if(pop.getRight() != null) {
+            if (pop.getRight() != null) {
                 stack.push(pop.getRight());
             }
-            if(pop.getLeft() != null) {
+            if (pop.getLeft() != null) {
                 stack.push(pop.getLeft());
             }
         }
@@ -201,15 +205,16 @@ public class Client {
 
     /**
      * 非递归的中序遍历
+     *
      * @param root
      */
     public static void inOrderNonRecursive(TreeNode root) {
-        if(root == null) {
+        if (root == null) {
             return;
         }
         Stack<TreeNode> stack = new Stack<>();
         TreeNode curso = root;
-        while(curso != null || !stack.empty()) {
+        while (curso != null || !stack.empty()) {
             while (curso != null) {
                 stack.push(curso);
                 curso = curso.getLeft();
@@ -223,22 +228,23 @@ public class Client {
 
     /**
      * 二叉树 非递归 后序遍历
+     *
      * @param root
      */
     public static void postOrderNonRecusive(TreeNode root) {
-        if(root == null) {
+        if (root == null) {
             return;
         }
         Stack<TreeNode> stack = new Stack<>();
         TreeNode cursor = root;
         TreeNode lastVisitedNode = root;
-        while(cursor != null || !stack.empty()) {
-            while(cursor !=null) {
+        while (cursor != null || !stack.empty()) {
+            while (cursor != null) {
                 stack.push(cursor);
                 cursor = cursor.getLeft();
             }
             TreeNode peekTopNode = stack.peek();
-            if(peekTopNode.getRight() !=null &&
+            if (peekTopNode.getRight() != null &&
                     peekTopNode.getRight() != lastVisitedNode) {
                 cursor = peekTopNode.getRight();
             } else {
@@ -249,7 +255,75 @@ public class Client {
         }
     }
 
+    /**
+     * 二叉树层次遍历
+     */
+    public static void cellOrder(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            TreeNode poll = queue.poll();
+            System.out.print(poll.getVal());
+            if (poll.getLeft() != null) {
+                queue.offer(poll.getLeft());
+            }
+            if (poll.getRight() != null) {
+                queue.offer(poll.getRight());
+            }
+        }
+    }
+
+    /**
+     * 将数组转换成二叉树
+     * 下标从零开始
+     * 左树下标 2 * i + 1
+     * 右树下标 2 * i + 2
+     * 数组转二叉树
+     *
+     * @return
+     */
+    public static TreeNode buildTreeByArray(char[] charArray) {
+        if (charArray == null || charArray.length <= 0) {
+            return null;
+        }
+        TreeNode[] tempTreeNodeArray = new TreeNode[charArray.length];
+        TreeNode cursor = null;
+        for (int i = 0; i < charArray.length; i++) {
+            char c = charArray[i];
+            if (c == ' ') {
+                continue;
+            }
+            if (tempTreeNodeArray[i] != null) {
+                cursor = tempTreeNodeArray[i];
+            } else {
+                cursor = new TreeNode(c);
+            }
+
+            tempTreeNodeArray[i] = cursor;
+            int leftIndex = 2 * i + 1;
+            int rightIndex = 2 * i + 2;
+            if (charArray[leftIndex] != ' ') {
+                TreeNode leftNode = new TreeNode(charArray[leftIndex]);
+                cursor.setLeft(leftNode);
+                tempTreeNodeArray[leftIndex] = leftNode;
+            }
+            if (charArray[rightIndex] != ' ') {
+                TreeNode rightNode = new TreeNode(charArray[rightIndex]);
+                cursor.setRight(rightNode);
+                tempTreeNodeArray[rightIndex] = rightNode;
+            }
+        }
+        return tempTreeNodeArray[0];
+    }
+
     public static void main(String[] args) {
+        char[] charArray = {'a', 'b', 'c', 'd', 'e', ' ', 'g', ' ', ' ', ' ', 'f', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '
+                , ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+        TreeNode treeNode = Client.buildTreeByArray(charArray);
+
         TreeNode rootTreeNode = Client.createTreeNode();
         // a b d e h c f g
         Client.preOrderNonRecursive(rootTreeNode);
@@ -259,6 +333,8 @@ public class Client {
         System.out.println();
         // d h e b f g c a
         Client.postOrderNonRecusive(rootTreeNode);
+        System.out.println();
+        Client.cellOrder(rootTreeNode);
         // 先序遍历
 //        Client.preOrder(rootTreeNode);
         // 中序遍历
