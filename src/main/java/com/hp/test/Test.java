@@ -1,10 +1,12 @@
 package com.hp.test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Test {
 
     public static void main(String[] args) {
+        xxx();
         String s = "AAAABBBFFEEFFIO";
         Map<String, Integer> countMap = new HashMap<>();
         for (int i = 0; i < s.length(); i++) {
@@ -38,6 +40,23 @@ public class Test {
             finalMap.put(o.getKey(), o.getValue());
         });
         System.out.println(finalMap);
+
+    }
+
+    public static void xxx() {
+        int[] a = {5,4,3,8,2};
+        int[] b = new int[]{89,34,12,900};
+        int[] c = Arrays.copyOf(a, a.length + b.length);
+        System.arraycopy(b, 0, c, a.length, b.length);
+        Integer[] integers = Arrays.stream(c).boxed().toArray(Integer[]::new);
+        Arrays.sort(integers, new Comparator<Integer>() {
+
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2 - o1;
+            }
+        });
+        System.out.println(Arrays.toString(integers));
 
     }
 

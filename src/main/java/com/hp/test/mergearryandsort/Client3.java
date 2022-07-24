@@ -17,6 +17,7 @@ public class Client3 {
         // 使用Arrays.sort + Comparator 排序
         Integer[] integers = Arrays.stream(c).boxed().toArray(Integer[]::new);
         Arrays.sort(integers, new Comparator<Integer>() {
+            @Override
             public int compare(Integer num1, Integer num2) {
                 return num1 - num2;
             }
